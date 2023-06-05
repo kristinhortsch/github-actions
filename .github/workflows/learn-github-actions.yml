@@ -1,13 +1,38 @@
+# Name of workflow as it will appear in the "Actions" tab of the GH repo
 name: learn-github-actions
+
+# Name for workflow runs which appear in a list of workflow runs on your repo's "Actions" tab
 run-name: ${{ github.actor }} is learning GitHub Actions
+
+# Names the trigger for this workflow
 on: [push]
+
+# Groups together all the jobs that run in the `learn-github-actions` workflow
 jobs:
+
+  # Defines a job called `check-bats-version`, child keys define properties of the job
   check-bats-version:
+  
+    # Configures job to run on latest version of an Ubuntu Linux runner
     runs-on: ubuntu-latest
+
+    # Groups together all the steps that run in the `check-bats-version` job
+    # Each item list4ed is a separate action or shell script
     steps:
+
+      # `uses` keyword specifies that this step will run `v3` of the `actions/checkout` action
+      # It checks out your repo onto the runner, allowing you to run scripts or other actions against your code
+      # The checkout action should be used any time your workflow needs to run against the repo's code
       - uses: actions/checkout@v3
+
+      # Uses the `actions/setup-node@v3` action to install the specified version of Node.js
+      # This action puts both the `node` and `npm` commands in your `PATH`
       - uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: "14"
+
+      # The `run` keyword tells the job to execute a command on the runner
       - run: npm install -g bats
+
+      # Simply runs the `bats` command with a param that outputs the version
       - run: bats -v
